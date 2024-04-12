@@ -1,6 +1,21 @@
-import gsap from "gsap";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/Addons.js";
 import "./styles/index.css";
+
+// const cursor = {
+//   x: 0,
+//   y: 0,
+// };
+
+// window.addEventListener("mousemove", (event) => {
+//   cursor.x = event.clientX / window.innerWidth - 0.5;
+//   cursor.y = event.clientY / window.innerHeight - 0.5;
+// });
+
+// window.addEventListener("mouseout", () => {
+//   cursor.x = 0;
+//   cursor.y = 0;
+// });
 
 const scene = new THREE.Scene();
 
@@ -30,19 +45,30 @@ const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  100
 );
 
-camera.position.y = 3;
+// const aspectRatio = window.innerWidth / window.innerHeight;
+// const camera = new THREE.OrthographicCamera(
+//   -3 * aspectRatio,
+//   3 * aspectRatio,
+//   3,
+//   -3,
+//   0.1,
+//   100
+// );
+
+// camera.position.y = 3;
 camera.position.z = 5;
-camera.lookAt(group.position);
+// camera.lookAt(group.position);
 
 scene.add(camera, axesHelper, group);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
+const canvas = document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
 // let time = Date.now();
 
 // const tick = () => {
@@ -58,15 +84,19 @@ document.body.appendChild(renderer.domElement);
 
 // tick();
 
-gsap.to(group.position, { duration: 1, delay: 1, y: 1 });
-gsap.to(group.position, { duration: 1, delay: 2, y: 0 });
-
-let clock = new THREE.Clock();
+// let clock = new THREE.Clock();
 
 const tick = () => {
-  const elapsedTime = clock.getElapsedTime();
+  // const elapsedTime = clock.getElapsedTime();
 
-  group.rotation.y = elapsedTime / 1.5;
+  // group.rotation.y = elapsedTime / 1.5;
+  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 5;
+  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 5;
+  // camera.position.y = -cursor.y * 5;
+  // camera.lookAt(group.position);
+
+  controls.update();
+
   renderer.render(scene, camera);
 
   window.requestAnimationFrame(tick);
