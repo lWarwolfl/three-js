@@ -84,12 +84,12 @@ controls.enableDamping = true;
 
 // tick();
 
-// let clock = new THREE.Clock();
+let clock = new THREE.Clock();
 
 const tick = () => {
-  // const elapsedTime = clock.getElapsedTime();
+  const elapsedTime = clock.getElapsedTime();
 
-  // group.rotation.y = elapsedTime / 1.5;
+  group.rotation.y = elapsedTime / 1.5;
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 5;
   // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 5;
   // camera.position.y = -cursor.y * 5;
