@@ -19,25 +19,54 @@ import "./styles/index.css";
 
 const scene = new THREE.Scene();
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material1 = new THREE.MeshBasicMaterial({ color: 0x333333 });
-const material2 = new THREE.MeshBasicMaterial({ color: 0x444444 });
-const material3 = new THREE.MeshBasicMaterial({ color: 0x555555 });
-const material4 = new THREE.MeshBasicMaterial({ color: 0x666666 });
+const geometry1 = new THREE.BufferGeometry();
+const count = 50;
+const positionsArray = new Float32Array(count * 3 * 3);
+for (let i = 0; i < count * 3 * 3; i++) {
+  positionsArray[i] = (Math.random() - 0.5);
+}
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+geometry1.setAttribute("position", positionsAttribute);
 
-const cube1 = new THREE.Mesh(geometry, material1);
+const geometry2 = new THREE.SphereGeometry(0.5, 24, 12);
 
-const cube2 = new THREE.Mesh(geometry, material2);
-cube2.position.x = 1.1;
+const geometry3 = new THREE.BoxGeometry(1, 1, 1);
 
-const cube3 = new THREE.Mesh(geometry, material3);
-cube3.position.y = 1.1;
+const geometry4 = new THREE.OctahedronGeometry(0.5);
 
-const cube4 = new THREE.Mesh(geometry, material4);
-cube4.position.z = 1.1;
+const material1 = new THREE.MeshBasicMaterial({
+  color: 0x333333,
+  wireframe: true,
+});
+
+const material2 = new THREE.MeshBasicMaterial({
+  color: 0x444444,
+  wireframe: true,
+});
+
+const material3 = new THREE.MeshBasicMaterial({
+  color: 0x555555,
+  wireframe: true,
+});
+
+const material4 = new THREE.MeshBasicMaterial({
+  color: 0x666666,
+  wireframe: true,
+});
+
+const element1 = new THREE.Mesh(geometry1, material1);
+
+const element2 = new THREE.Mesh(geometry2, material2);
+element2.position.x = 1.1;
+
+const element3 = new THREE.Mesh(geometry3, material3);
+element3.position.y = 1.1;
+
+const element4 = new THREE.Mesh(geometry4, material4);
+element4.position.z = 1.1;
 
 const group = new THREE.Group();
-group.add(cube1, cube2, cube3, cube4);
+group.add(element1, element2, element3, element4);
 
 const axesHelper = new THREE.AxesHelper(2);
 
@@ -108,12 +137,12 @@ controls.enableDamping = true;
 
 // tick();
 
-let clock = new THREE.Clock();
+// let clock = new THREE.Clock();
 
 const tick = () => {
-  const elapsedTime = clock.getElapsedTime();
+  // const elapsedTime = clock.getElapsedTime();
 
-  group.rotation.y = elapsedTime / 1.5;
+  // group.rotation.y = elapsedTime / 1.5;
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 5;
   // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 5;
   // camera.position.y = -cursor.y * 5;
