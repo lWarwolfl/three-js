@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    Liberation Mono, Courier New, monospace;
+}
+
+body {
+  background-color: black;
+}
+
+.main-container {
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 80px;
+  padding: 32px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 32px;
+  color: whitesmoke;
+  text-underline-offset: 3px;
+  text-decoration: none;
+}
+
+.link {
+  font-size: 16px;
+  color: whitesmoke;
+  text-underline-offset: 3px;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+
+.back-button {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  z-index: 1000;
+}
