@@ -12,7 +12,7 @@ body {
 
 .main-container {
   width: 100dvw;
-  height: 100dvh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,6 +27,7 @@ body {
   color: whitesmoke;
   text-underline-offset: 3px;
   text-decoration: none;
+  text-align: center;
 }
 
 .link {
@@ -54,4 +55,10 @@ body {
   top: 32px;
   left: 32px;
   z-index: 1000;
+}
+
+@media screen and (max-width: 600px) {
+  .link-container {
+    flex-direction: column;
+  }
 }
