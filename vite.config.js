@@ -12,6 +12,7 @@ export default defineConfig({
         fullscreenResize: "5-fullscreen-resize.html",
         geometries: "6-geometries.html",
         debugUi: "7-debug-ui.html",
+        textures: "8-textures.html",
       },
     },
   },

@@ -10,6 +10,29 @@ body {
   background-color: black;
 }
 
+body.loading {
+  overflow: hidden;
+}
+
+#loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100dvw;
+  height: 100dvh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  font-weight: bold;
+  font-size: 20px;
+  color: whitesmoke;
+  animation: blink 1.3s ease-in-out infinite;
+  transition: 500ms;
+  opacity: 1;
+  z-index: 5000;
+}
+
 .main-container {
   width: 100dvw;
   min-height: 100dvh;
@@ -93,7 +116,7 @@ body {
 .progress {
   top: 0;
   left: 0;
-  width: 19%;
+  width: 15%;
   height: 4px;
   background-color: whitesmoke;
 }
@@ -101,5 +124,17 @@ body {
 @media screen and (max-width: 600px) {
   .link-container {
     flex-direction: column;
+  }
+}
+
+@keyframes blink {
+  0% {
+    color: white;
+  }
+  50% {
+    color: #444444;
+  }
+  100% {
+    color: white;
   }
 }

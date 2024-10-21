@@ -3,13 +3,77 @@ import * as dat from "lil-gui";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
+// const image = new Image();
+// const texture = new THREE.Texture(image);
+// texture.colorSpace = THREE.SRGBColorSpace;
+
+// image.src = "/textures/door/Door_Wood_001_basecolor.jpg";
+// image.onload = () => {
+//   texture.needsUpdate = true;
+// };
+
+const loadingManger = new THREE.LoadingManager();
+
+document.body.classList.add("loading");
+const loadingContainer = document.getElementById("loading-container");
+
+loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
+  if (itemsLoaded / itemsTotal === 1) {
+    document.body.classList.remove("loading");
+
+    if (loadingContainer) {
+      setTimeout(() => {
+        loadingContainer.style.opacity = "0";
+      }, 500);
+
+      setTimeout(() => {
+        loadingContainer.style.display = "none";
+      }, 1000);
+    }
+  }
+};
+
+const textureLoader = new THREE.TextureLoader(loadingManger);
+const baseColorTexture = textureLoader.load("/textures/minecraft.jpeg");
+baseColorTexture.colorSpace = THREE.SRGBColorSpace;
+baseColorTexture.magFilter = THREE.NearestFilter;
+baseColorTexture.generateMipmaps = false;
+
+// baseColorTexture.repeat.x = 3;
+// baseColorTexture.repeat.y = 3;
+// baseColorTexture.wrapS = THREE.RepeatWrapping;
+// baseColorTexture.wrapT = THREE.RepeatWrapping;
+
+// baseColorTexture.rotation = Math.PI / 4;
+// baseColorTexture.center.x = 0.5;
+// baseColorTexture.center.y = 0.5;
+
+// const heightTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_height.png"
+// );
+// const alphaTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_opacity.jpg"
+// );
+// const ambientOcclusionTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_ambientOcclusion.jpg"
+// );
+// const metallicTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_metallic.jpg"
+// );
+// const normalTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_normal.jpg"
+// );
+// const roughnessTexture = textureLoader.load(
+//   "/textures/door/Door_Wood_001_roughness.jpg"
+// );
+
 const gui = new dat.GUI();
 
 const scene = new THREE.Scene();
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({
-  color: 0x333333,
+  map: baseColorTexture,
 });
 
 const element = new THREE.Mesh(geometry, material);
@@ -93,11 +157,13 @@ positionFolder
   .max(3)
   .step(0.1)
   .name("Position Z");
+positionFolder.close();
 
 // Scale controls
 scaleFolder.add(element.scale, "x").min(0.1).max(5).step(0.1).name("Scale X");
 scaleFolder.add(element.scale, "y").min(0.1).max(5).step(0.1).name("Scale Y");
 scaleFolder.add(element.scale, "z").min(0.1).max(5).step(0.1).name("Scale Z");
+scaleFolder.close();
 
 // Rotation controls
 rotationFolder
@@ -118,9 +184,11 @@ rotationFolder
   .max(Math.PI)
   .step(0.01)
   .name("Rotation Z");
+rotationFolder.close();
 
 // Properties
 propertiesFolder.addColor(element.material, "color");
 propertiesFolder.add(element, "visible").name("Visibility");
 propertiesFolder.add(element.material, "wireframe").name("Wireframe");
 propertiesFolder.add(parameters, "spin");
+propertiesFolder.close();
