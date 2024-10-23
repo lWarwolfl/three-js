@@ -48,14 +48,14 @@ minecraftColorTexture.colorSpace = THREE.SRGBColorSpace;
 const doorColorTexture = textureLoader.load("/textures/door/color.jpg");
 doorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
-const doorHeightTexture = textureLoader.load("/textures/door/height.jpg");
-const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
-const doorAmbientOcclusionTexture = textureLoader.load(
-  "/textures/door/ambientOcclusion.jpg"
-);
-const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
-const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
-const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+// const doorHeightTexture = textureLoader.load("/textures/door/height.jpg");
+// const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
+// const doorAmbientOcclusionTexture = textureLoader.load(
+//   "/textures/door/ambientOcclusion.jpg"
+// );
+// const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
+// const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
+// const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
 
 const matcapTexture = textureLoader.load("/textures/matcaps/8.png");
 matcapTexture.colorSpace = THREE.SRGBColorSpace;
@@ -66,37 +66,37 @@ gradientTexture.magFilter = THREE.NearestFilter;
 
 const scene = new THREE.Scene();
 
-const minecraftMaterial = new THREE.MeshBasicMaterial({
-  map: minecraftColorTexture,
-});
+// const minecraftMaterial = new THREE.MeshBasicMaterial({
+//   map: minecraftColorTexture,
+// });
 
-const basicMaterial = new THREE.MeshBasicMaterial({ map: doorColorTexture });
+// const basicMaterial = new THREE.MeshBasicMaterial({ map: doorColorTexture });
 
-const normalMaterial = new THREE.MeshNormalMaterial();
+// const normalMaterial = new THREE.MeshNormalMaterial();
 
-const matcapMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+// const matcapMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
 
-const depthMaterial = new THREE.MeshDepthMaterial();
+// const depthMaterial = new THREE.MeshDepthMaterial();
 
-const lambertMaterial = new THREE.MeshLambertMaterial();
+// const lambertMaterial = new THREE.MeshLambertMaterial();
 
-const phongMaterial = new THREE.MeshPhongMaterial({
-  shininess: 200,
-  specular: new THREE.Color(0x1188ff),
-});
+// const phongMaterial = new THREE.MeshPhongMaterial({
+//   shininess: 200,
+//   specular: new THREE.Color(0x1188ff),
+// });
 
-const toonMaterial = new THREE.MeshToonMaterial({
-  gradientMap: gradientTexture,
-});
+// const toonMaterial = new THREE.MeshToonMaterial({
+//   gradientMap: gradientTexture,
+// });
 
-const standardMaterial = new THREE.MeshStandardMaterial({
-  metalness: 1,
-  roughness: 0,
-  map: doorColorTexture,
-  aoMap: doorAmbientOcclusionTexture,
-  normalMap: doorNormalTexture,
-  alphaMap: doorAlphaTexture,
-});
+// const standardMaterial = new THREE.MeshStandardMaterial({
+//   metalness: 1,
+//   roughness: 0,
+//   map: doorColorTexture,
+//   aoMap: doorAmbientOcclusionTexture,
+//   normalMap: doorNormalTexture,
+//   alphaMap: doorAlphaTexture,
+// });
 
 const physicalMaterial = new THREE.MeshPhysicalMaterial({
   metalness: 0,
@@ -134,7 +134,7 @@ pointLight.lookAt(group.position);
 scene.add(pointLight);
 
 const rgbeLoader = new RGBELoader(loadingManger);
-const environmentMap = rgbeLoader.load(
+rgbeLoader.load(
   "/textures/environmentMap/2k.hdr",
   (environmentMap) => {
     environmentMap.mapping = THREE.EquirectangularReflectionMapping;
