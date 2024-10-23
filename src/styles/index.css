@@ -33,6 +33,10 @@ body.loading {
   z-index: 5000;
 }
 
+#percentage {
+  margin-left: 8px;
+}
+
 .main-container {
   width: 100dvw;
   min-height: 100dvh;
@@ -116,7 +120,7 @@ body.loading {
 .progress {
   top: 0;
   left: 0;
-  width: 15%;
+  width: 17%;
   height: 4px;
   background-color: whitesmoke;
 }

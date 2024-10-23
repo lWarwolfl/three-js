@@ -13,6 +13,7 @@ export default defineConfig({
         geometries: "6-geometries.html",
         debugUi: "7-debug-ui.html",
         textures: "8-textures.html",
+        materials: "9-materials.html",
       },
     },
   },
