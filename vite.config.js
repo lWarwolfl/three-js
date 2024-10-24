@@ -14,6 +14,8 @@ export default defineConfig({
         debugUi: "7-debug-ui.html",
         textures: "8-textures.html",
         materials: "9-materials.html",
+        threedText: "10-3d-text.html",
+        love: "love.html",
       },
     },
   },
