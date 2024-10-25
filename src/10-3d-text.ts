@@ -1,12 +1,9 @@
-import * as dat from "lil-gui";
 import * as THREE from "three";
 import {
   FontLoader,
   OrbitControls,
   TextGeometry,
 } from "three/examples/jsm/Addons.js";
-
-const gui = new dat.GUI();
 
 const loadingManger = new THREE.LoadingManager();
 
@@ -130,6 +127,3 @@ const tick = () => {
 };
 
 tick();
-
-// Add a reset button to the GUI
-gui.add({ reset: () => gui.reset() }, "reset").name("Reset To Default");
