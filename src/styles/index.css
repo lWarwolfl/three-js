@@ -164,6 +164,13 @@ body.loading {
     border-left-width: 2px;
     border-top-width: 48px;
   }
+
+  .chapter-title {
+    left: unset;
+    top: -32px;
+    writing-mode: unset;
+    rotate: unset;
+  }
 }
 
 @keyframes blink {
