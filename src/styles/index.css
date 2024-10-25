@@ -38,13 +38,13 @@ body.loading {
 }
 
 .main-container {
-  width: 100dvw;
+  width: 100%;
   min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 80px;
+  gap: 64px;
   padding: 32px;
 }
 
@@ -81,12 +81,32 @@ body.loading {
 }
 
 .link-container {
+  position: relative;
   width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 48px;
+  padding: 24px;
+  border: 2px solid white;
+  border-left-width: 48px;
+  border-radius: 8px;
+  overflow: visible;
+  color: whitesmoke;
+  font-size: 16px;
+  min-height: 136px;
+}
+
+.chapter-title {
+  position: absolute;
+  left: -32px;
+  writing-mode: vertical-rl;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  rotate: 180deg;
 }
 
 .back-button {
@@ -130,9 +150,19 @@ body.loading {
   background-repeat: repeat;
 }
 
-@media screen and (max-width: 600px) {
+.dotted-background-transparent {
+  background-image: url("/background/background-transparent.png");
+  background-repeat: repeat;
+}
+
+@media screen and (max-width: 768px) {
   .link-container {
     flex-direction: column;
+  }
+
+  .link-container {
+    border-left-width: 2px;
+    border-top-width: 48px;
   }
 }
 
@@ -146,4 +176,21 @@ body.loading {
   100% {
     color: white;
   }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: gainsboro;
 }
