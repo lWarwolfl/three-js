@@ -104,10 +104,6 @@ camera.position.z = 5;
 
 scene.add(camera);
 
-const axesHelper = new THREE.AxesHelper(2);
-
-scene.add(axesHelper);
-
 window.addEventListener("resize", () => {
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
