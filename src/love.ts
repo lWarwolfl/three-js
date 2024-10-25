@@ -133,12 +133,14 @@ fontLoader.load("/fonts/DM_Mono_Regular.json", (font) => {
     bevelSegments: 5,
   });
 
+  textGeometry.center();
+  textGeometry2.center();
+
   const text = new THREE.Mesh(textGeometry, normalMaterial);
   const text2 = new THREE.Mesh(textGeometry2, normalMaterial);
 
-  text.position.x = -2.3;
   text.position.y = 0.5;
-  text2.position.x = -2.1;
+
   text2.position.y = -0.5;
 
   scene.add(text, text2);
