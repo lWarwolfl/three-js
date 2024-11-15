@@ -16,6 +16,7 @@ export default defineConfig({
         materials: "9-materials.html",
         threedText: "10-3d-text.html",
         lights: "11-lights.html",
+        shadows: "12-shadows.html",
         love: "love.html",
       },
     },
