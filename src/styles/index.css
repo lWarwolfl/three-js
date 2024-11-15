@@ -146,13 +146,15 @@ body.loading {
 }
 
 .dotted-background {
-  background-image: url("/background/background.png");
+  background-image: url("/background/background.svg");
   background-repeat: repeat;
+  background-size: 60px 60px;
 }
 
 .dotted-background-transparent {
-  background-image: url("/background/background-transparent.png");
+  background-image: url("/background/background-transparent.svg");
   background-repeat: repeat;
+  background-size: 60px 60px;
 }
 
 @media screen and (max-width: 768px) {
