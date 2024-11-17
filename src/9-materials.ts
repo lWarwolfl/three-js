@@ -1,44 +1,11 @@
 import * as dat from "lil-gui";
 import * as THREE from "three";
 import { OrbitControls, RGBELoader } from "three/examples/jsm/Addons.js";
+import { startLoadingManager } from "./loadingManager";
 
 const gui = new dat.GUI();
 
-const loadingManger = new THREE.LoadingManager();
-
-document.body.classList.add("loading");
-const loadingContainer = document.getElementById("loading-container");
-const percentageContainer = document.getElementById("percentage");
-
-loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
-  const progress = itemsLoaded / itemsTotal;
-  const percentage = parseFloat(progress.toFixed(2)) * 100;
-
-  if (percentageContainer)
-    percentageContainer.innerHTML = `${
-      percentage / 1 >= 1
-        ? percentage / 10 >= 1
-          ? percentage / 100 >= 1
-            ? percentage
-            : "0" + percentage
-          : "00" + percentage
-        : "000" + percentage
-    }%`;
-
-  if (progress === 1) {
-    document.body.classList.remove("loading");
-
-    if (loadingContainer) {
-      setTimeout(() => {
-        loadingContainer.style.opacity = "0";
-      }, 500);
-
-      setTimeout(() => {
-        loadingContainer.style.display = "none";
-      }, 1000);
-    }
-  }
-};
+const loadingManger = startLoadingManager();
 
 const textureLoader = new THREE.TextureLoader(loadingManger);
 
@@ -134,14 +101,11 @@ pointLight.lookAt(group.position);
 scene.add(pointLight);
 
 const rgbeLoader = new RGBELoader(loadingManger);
-rgbeLoader.load(
-  "/textures/environmentMap/2k.hdr",
-  (environmentMap) => {
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = environmentMap;
-    scene.environment = environmentMap;
-  }
-);
+rgbeLoader.load("/textures/environmentMap/2k.hdr", (environmentMap) => {
+  environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = environmentMap;
+  scene.environment = environmentMap;
+});
 
 const axesHelper = new THREE.AxesHelper(2);
 

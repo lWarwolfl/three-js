@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { startLoadingManager } from "./loadingManager";
 
 // const image = new Image();
 // const texture = new THREE.Texture(image);
@@ -10,26 +11,7 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 //   texture.needsUpdate = true;
 // };
 
-const loadingManger = new THREE.LoadingManager();
-
-document.body.classList.add("loading");
-const loadingContainer = document.getElementById("loading-container");
-
-loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
-  if (itemsLoaded / itemsTotal === 1) {
-    document.body.classList.remove("loading");
-
-    if (loadingContainer) {
-      setTimeout(() => {
-        loadingContainer.style.opacity = "0";
-      }, 500);
-
-      setTimeout(() => {
-        loadingContainer.style.display = "none";
-      }, 1000);
-    }
-  }
-};
+const loadingManger = startLoadingManager();
 
 const textureLoader = new THREE.TextureLoader(loadingManger);
 const colorTexture = textureLoader.load("/textures/minecraft.jpeg");
