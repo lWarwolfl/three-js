@@ -19,6 +19,7 @@ const sphere = new THREE.Mesh(
   mainMaterial
 );
 sphere.position.y = 1;
+sphere.castShadow = true;
 scene.add(sphere);
 
 const plane = new THREE.Mesh(
@@ -26,10 +27,15 @@ const plane = new THREE.Mesh(
   mainMaterial
 );
 plane.rotation.x = -Math.PI / 2;
+plane.receiveShadow = true;
 scene.add(plane);
 
-const directionalLight = new THREE.DirectionalLight(0xffffdd, 2);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xeeffff, 2);
 directionalLight.position.set(1, 2, 0);
+directionalLight.castShadow = true;
 scene.add(directionalLight);
 
 const directionalLightHelper = new THREE.DirectionalLightHelper(
@@ -67,6 +73,7 @@ window.addEventListener("resize", () => {
 });
 
 const renderer = new THREE.WebGLRenderer();
+renderer.shadowMap.enabled = true;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const canvas = document.body.appendChild(renderer.domElement);
