@@ -6,9 +6,12 @@ export const startLoadingManager = () => {
   const loadingContainer = document.getElementById("loading-container");
   const percentageContainer = document.getElementById("percentage");
 
-  loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
+  type LoadFunctionType = (url: string, loaded: number, total: number) => void;
+
+  const load: LoadFunctionType = (_, itemsLoaded, itemsTotal) => {
     const progress = itemsLoaded / itemsTotal;
     const percentage = parseFloat(progress.toFixed(2)) * 100;
+    console.log(itemsTotal);
 
     if (percentageContainer)
       percentageContainer.innerHTML = `${
@@ -21,7 +24,7 @@ export const startLoadingManager = () => {
           : "000" + percentage
       }%`;
 
-    if (progress === 1) {
+    if (progress === 1 || itemsTotal === 0) {
       document.body.classList.remove("loading");
 
       if (loadingContainer) {
@@ -35,6 +38,9 @@ export const startLoadingManager = () => {
       }
     }
   };
+
+  loadingManger.onStart = load;
+  loadingManger.onProgress = load;
 
   return loadingManger;
 };

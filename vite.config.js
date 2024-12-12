@@ -17,6 +17,7 @@ export default defineConfig({
         threedText: "10-3d-text.html",
         lights: "11-lights.html",
         shadows: "12-shadows.html",
+        hauntedHouse: "13-haunted-house.html",
         love: "love.html",
       },
     },
