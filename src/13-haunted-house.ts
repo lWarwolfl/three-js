@@ -16,14 +16,45 @@ textureLoader.load("/shadow/bakedShadow.jpg");
 const standardMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.1,
   roughness: 0.6,
-  side: 2,
 });
 
-const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(0.5, 32, 16),
+const wallsMeasurements = {
+  width: 4,
+  height: 2.5,
+  depth: 4,
+};
+
+const roofMeasurements = {
+  height: 2,
+  radius: 3,
+};
+
+const house = new THREE.Group();
+
+const walls = new THREE.Mesh(
+  new THREE.BoxGeometry(
+    wallsMeasurements.width,
+    wallsMeasurements.height,
+    wallsMeasurements.depth
+  ),
   standardMaterial
 );
-scene.add(sphere);
+walls.position.y += wallsMeasurements.height * 0.5;
+
+const roof = new THREE.Mesh(
+  new THREE.ConeGeometry(roofMeasurements.radius, roofMeasurements.height, 4),
+  standardMaterial
+);
+roof.position.y += wallsMeasurements.height + roofMeasurements.height * 0.5;
+roof.rotation.y += Math.PI * 0.25;
+
+house.add(walls, roof);
+
+scene.add(house);
+
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), standardMaterial);
+plane.rotation.x += -Math.PI * 0.5;
+scene.add(plane);
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
 scene.add(ambientLight);
@@ -45,7 +76,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.y = 2;
 camera.position.z = 5;
-camera.lookAt(sphere.position);
+camera.lookAt(house.position);
 scene.add(camera);
 
 window.addEventListener("resize", () => {
@@ -85,19 +116,19 @@ const positionFolder = gui.addFolder("Position Controls");
 
 // Position controls
 positionFolder
-  .add(sphere.position, "x")
+  .add(house.position, "x")
   .min(-3)
   .max(3)
   .step(0.1)
   .name("Position X");
 positionFolder
-  .add(sphere.position, "y")
+  .add(house.position, "y")
   .min(-3)
   .max(3)
   .step(0.1)
   .name("Position Y");
 positionFolder
-  .add(sphere.position, "z")
+  .add(house.position, "z")
   .min(-3)
   .max(3)
   .step(0.1)
