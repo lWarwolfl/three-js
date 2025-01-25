@@ -11,12 +11,9 @@ const scene = new THREE.Scene();
 const loadingManger = startLoadingManager();
 
 const textureLoader = new THREE.TextureLoader(loadingManger);
-textureLoader.load("/shadow/bakedShadow.jpg");
-
-const standardMaterial = new THREE.MeshStandardMaterial({
-  metalness: 0.1,
-  roughness: 0.6,
-});
+const floorTextures = {
+  alpha: textureLoader.load("/textures/haunted-house/floor/alpha.jpg"),
+};
 
 const wallsMeasurements = {
   width: 4,
@@ -29,6 +26,11 @@ const roofMeasurements = {
   radius: 3,
 };
 
+const doorMeasurements = {
+  width: 2.2,
+  height: 2.2,
+};
+
 const house = new THREE.Group();
 
 const walls = new THREE.Mesh(
@@ -37,24 +39,83 @@ const walls = new THREE.Mesh(
     wallsMeasurements.height,
     wallsMeasurements.depth
   ),
-  standardMaterial
+  new THREE.MeshStandardMaterial()
 );
 walls.position.y += wallsMeasurements.height * 0.5;
 
 const roof = new THREE.Mesh(
   new THREE.ConeGeometry(roofMeasurements.radius, roofMeasurements.height, 4),
-  standardMaterial
+  new THREE.MeshStandardMaterial()
 );
 roof.position.y += wallsMeasurements.height + roofMeasurements.height * 0.5;
 roof.rotation.y += Math.PI * 0.25;
 
-house.add(walls, roof);
+const door = new THREE.Mesh(
+  new THREE.PlaneGeometry(doorMeasurements.width, roofMeasurements.height),
+  new THREE.MeshStandardMaterial({ color: "red" })
+);
+door.position.y = roofMeasurements.height * 0.5;
+door.position.z = wallsMeasurements.width * 0.5 + 0.01;
+
+const bushGeometry = new THREE.SphereGeometry(1, 16, 16);
+const bushMaterial = new THREE.MeshStandardMaterial();
+
+const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush1.scale.set(0.5, 0.5, 0.5);
+bush1.position.set(0.8, 0.2, 2.2);
+
+const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush2.scale.set(0.25, 0.25, 0.25);
+bush2.position.set(1.4, 0.1, 2.1);
+
+const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush3.scale.set(0.4, 0.4, 0.4);
+bush3.position.set(-0.8, 0.1, 2.2);
+
+const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush4.scale.set(0.15, 0.15, 0.15);
+bush4.position.set(-1, 0.05, 2.6);
+
+house.add(walls, roof, door, bush1, bush2, bush3, bush4);
 
 scene.add(house);
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), standardMaterial);
-plane.rotation.x += -Math.PI * 0.5;
-scene.add(plane);
+const graveGeometry = new THREE.BoxGeometry(0.9, 1.2, 0.25);
+const graveMaterial = new THREE.MeshStandardMaterial();
+
+const graves = new THREE.Group();
+
+scene.add(graves);
+
+for (let i = 0; i <= 20; i++) {
+  const grave = new THREE.Mesh(graveGeometry, graveMaterial);
+
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 3.5 + Math.random() * 4.3;
+  const positionX = Math.sin(angle) * radius;
+  const positionY = Math.random() * 0.6;
+  const positionZ = Math.cos(angle) * radius;
+
+  grave.position.set(positionX, positionY, positionZ);
+
+  const rotationX = (Math.random() - 0.5) * 0.5;
+  const rotationY = (Math.random() - 0.5) * 0.5;
+  const rotationZ = (Math.random() - 0.5) * 0.5;
+
+  grave.rotation.set(rotationX, rotationY, rotationZ);
+
+  graves.add(grave);
+}
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(24, 24),
+  new THREE.MeshStandardMaterial({
+    alphaMap: floorTextures.alpha,
+    transparent: true,
+  })
+);
+floor.rotation.x += -Math.PI * 0.5;
+scene.add(floor);
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
 scene.add(ambientLight);
