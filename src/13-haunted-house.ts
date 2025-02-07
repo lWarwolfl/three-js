@@ -9,11 +9,7 @@ const gui = new dat.GUI();
 const scene = new THREE.Scene();
 
 const loadingManger = startLoadingManager();
-
 const textureLoader = new THREE.TextureLoader(loadingManger);
-const floorTextures = {
-  alpha: textureLoader.load("/textures/haunted-house/floor/alpha.jpg"),
-};
 
 const wallsMeasurements = {
   width: 4,
@@ -22,8 +18,9 @@ const wallsMeasurements = {
 };
 
 const roofMeasurements = {
-  height: 2,
-  radius: 3,
+  width: 4.8,
+  height: 0.3,
+  depth: 4.8,
 };
 
 const doorMeasurements = {
@@ -31,50 +28,183 @@ const doorMeasurements = {
   height: 2.2,
 };
 
+//Floor textures
+const floorAlphaTexture = textureLoader.load(
+  "/textures/haunted-house/floor/alpha.jpg"
+);
+const floorColorTexture = textureLoader.load(
+  "/textures/haunted-house/floor/diff.jpg"
+);
+const floorARMTexture = textureLoader.load(
+  "/textures/haunted-house/floor/arm.jpg"
+);
+const floorNormalTexture = textureLoader.load(
+  "/textures/haunted-house/floor/nor.jpg"
+);
+const floorDisplacementTexture = textureLoader.load(
+  "/textures/haunted-house/floor/disp.jpg"
+);
+
+const floorRepeat = 6;
+
+floorColorTexture.repeat.set(floorRepeat, floorRepeat);
+floorColorTexture.wrapS = THREE.RepeatWrapping;
+floorColorTexture.wrapT = THREE.RepeatWrapping;
+floorColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+floorARMTexture.repeat.set(floorRepeat, floorRepeat);
+floorARMTexture.wrapS = THREE.RepeatWrapping;
+floorARMTexture.wrapT = THREE.RepeatWrapping;
+
+floorNormalTexture.repeat.set(floorRepeat, floorRepeat);
+floorNormalTexture.wrapS = THREE.RepeatWrapping;
+floorNormalTexture.wrapT = THREE.RepeatWrapping;
+
+floorDisplacementTexture.repeat.set(floorRepeat, floorRepeat);
+floorDisplacementTexture.wrapS = THREE.RepeatWrapping;
+floorDisplacementTexture.wrapT = THREE.RepeatWrapping;
+
+//Wall textures
+const wallColorTexture = textureLoader.load(
+  "/textures/haunted-house/wall/diff.jpg"
+);
+const wallARMTexture = textureLoader.load(
+  "/textures/haunted-house/wall/arm.jpg"
+);
+const wallNormalTexture = textureLoader.load(
+  "/textures/haunted-house/wall/nor.jpg"
+);
+const wallRepeat = 2;
+
+wallColorTexture.repeat.set(wallRepeat, wallRepeat);
+wallColorTexture.wrapS = THREE.RepeatWrapping;
+wallColorTexture.wrapT = THREE.RepeatWrapping;
+wallColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+wallARMTexture.repeat.set(wallRepeat, wallRepeat);
+wallARMTexture.wrapS = THREE.RepeatWrapping;
+wallARMTexture.wrapT = THREE.RepeatWrapping;
+
+wallNormalTexture.repeat.set(wallRepeat, wallRepeat);
+wallNormalTexture.wrapS = THREE.RepeatWrapping;
+wallNormalTexture.wrapT = THREE.RepeatWrapping;
+
+//Floor textures
+const roofColorTexture = textureLoader.load(
+  "/textures/haunted-house/roof/diff.jpg"
+);
+const roofARMTexture = textureLoader.load(
+  "/textures/haunted-house/roof/arm.jpg"
+);
+const roofNormalTexture = textureLoader.load(
+  "/textures/haunted-house/roof/nor.jpg"
+);
+
+roofColorTexture.repeat.set(2, roofMeasurements.height);
+roofColorTexture.wrapS = THREE.RepeatWrapping;
+roofColorTexture.wrapT = THREE.RepeatWrapping;
+roofColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+roofARMTexture.repeat.set(2, roofMeasurements.height);
+roofARMTexture.wrapS = THREE.RepeatWrapping;
+roofARMTexture.wrapT = THREE.RepeatWrapping;
+
+roofNormalTexture.repeat.set(2, roofMeasurements.height);
+roofNormalTexture.wrapS = THREE.RepeatWrapping;
+roofNormalTexture.wrapT = THREE.RepeatWrapping;
+
+//Bush textures
+const bushColorTexture = textureLoader.load(
+  "/textures/haunted-house/bush/diff.jpg"
+);
+const bushARMTexture = textureLoader.load(
+  "/textures/haunted-house/bush/arm.jpg"
+);
+const bushNormalTexture = textureLoader.load(
+  "/textures/haunted-house/bush/nor.jpg"
+);
+
+bushColorTexture.repeat.set(2, 1);
+bushColorTexture.wrapS = THREE.RepeatWrapping;
+bushColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+bushARMTexture.repeat.set(2, 1);
+bushARMTexture.wrapS = THREE.RepeatWrapping;
+
+bushNormalTexture.repeat.set(2, 1);
+bushNormalTexture.wrapS = THREE.RepeatWrapping;
+
 const house = new THREE.Group();
 
 const walls = new THREE.Mesh(
   new THREE.BoxGeometry(
     wallsMeasurements.width,
     wallsMeasurements.height,
-    wallsMeasurements.depth
+    wallsMeasurements.depth,
+    100,
+    100
   ),
-  new THREE.MeshStandardMaterial()
+  new THREE.MeshStandardMaterial({
+    map: wallColorTexture,
+    aoMap: wallARMTexture,
+    roughnessMap: wallARMTexture,
+    metalnessMap: wallARMTexture,
+    normalMap: wallNormalTexture,
+  })
 );
 walls.position.y += wallsMeasurements.height * 0.5;
 
 const roof = new THREE.Mesh(
-  new THREE.ConeGeometry(roofMeasurements.radius, roofMeasurements.height, 4),
-  new THREE.MeshStandardMaterial()
+  new THREE.BoxGeometry(
+    roofMeasurements.width,
+    roofMeasurements.height,
+    roofMeasurements.depth
+  ),
+  new THREE.MeshStandardMaterial({
+    map: roofColorTexture,
+    aoMap: roofARMTexture,
+    roughnessMap: roofARMTexture,
+    metalnessMap: roofARMTexture,
+    normalMap: roofNormalTexture,
+  })
 );
 roof.position.y += wallsMeasurements.height + roofMeasurements.height * 0.5;
-roof.rotation.y += Math.PI * 0.25;
 
 const door = new THREE.Mesh(
-  new THREE.PlaneGeometry(doorMeasurements.width, roofMeasurements.height),
+  new THREE.PlaneGeometry(doorMeasurements.width, doorMeasurements.height),
   new THREE.MeshStandardMaterial({ color: "red" })
 );
-door.position.y = roofMeasurements.height * 0.5;
+door.position.y = doorMeasurements.height * 0.5;
 door.position.z = wallsMeasurements.width * 0.5 + 0.01;
 
 const bushGeometry = new THREE.SphereGeometry(1, 16, 16);
-const bushMaterial = new THREE.MeshStandardMaterial();
+const bushMaterial = new THREE.MeshStandardMaterial({
+  map: bushColorTexture,
+  aoMap: bushARMTexture,
+  roughnessMap: bushARMTexture,
+  metalnessMap: bushARMTexture,
+  normalMap: bushNormalTexture,
+});
 
 const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
 bush1.scale.set(0.5, 0.5, 0.5);
 bush1.position.set(0.8, 0.2, 2.2);
+bush1.rotation.x = -0.75;
 
 const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
 bush2.scale.set(0.25, 0.25, 0.25);
 bush2.position.set(1.4, 0.1, 2.1);
+bush2.rotation.x = -0.75;
 
 const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
 bush3.scale.set(0.4, 0.4, 0.4);
 bush3.position.set(-0.8, 0.1, 2.2);
+bush3.rotation.x = -0.75;
 
 const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
 bush4.scale.set(0.15, 0.15, 0.15);
-bush4.position.set(-1, 0.05, 2.6);
+bush4.position.set(-1.2, 0.05, 2.1);
+bush4.rotation.x = -0.75;
 
 house.add(walls, roof, door, bush1, bush2, bush3, bush4);
 
@@ -108,20 +238,28 @@ for (let i = 0; i <= 20; i++) {
 }
 
 const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(24, 24),
+  new THREE.PlaneGeometry(24, 24, 100, 100),
   new THREE.MeshStandardMaterial({
-    alphaMap: floorTextures.alpha,
+    alphaMap: floorAlphaTexture,
     transparent: true,
+    map: floorColorTexture,
+    aoMap: floorARMTexture,
+    roughnessMap: floorARMTexture,
+    metalnessMap: floorARMTexture,
+    normalMap: floorNormalTexture,
+    displacementMap: floorDisplacementTexture,
+    displacementScale: 0.51,
+    displacementBias: -0.25,
   })
 );
 floor.rotation.x += -Math.PI * 0.5;
 scene.add(floor);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+const ambientLight = new THREE.AmbientLight(0xeeffff, 0.4);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xeeffff, 1.2);
-directionalLight.position.set(2, 4, 0);
+directionalLight.position.set(-99, 9, -18);
 scene.add(directionalLight);
 
 const sizes = {
@@ -174,26 +312,41 @@ tick();
 
 // Add GUI folders
 const positionFolder = gui.addFolder("Position Controls");
+const displacementFolder = gui.addFolder("Displacement Controls");
 
 // Position controls
 positionFolder
-  .add(house.position, "x")
-  .min(-3)
-  .max(3)
+  .add(directionalLight.position, "x")
+  .min(-100)
+  .max(100)
   .step(0.1)
   .name("Position X");
 positionFolder
-  .add(house.position, "y")
-  .min(-3)
-  .max(3)
+  .add(directionalLight.position, "y")
+  .min(-100)
+  .max(100)
   .step(0.1)
   .name("Position Y");
 positionFolder
-  .add(house.position, "z")
-  .min(-3)
-  .max(3)
+  .add(directionalLight.position, "z")
+  .min(-100)
+  .max(100)
   .step(0.1)
   .name("Position Z");
+
+displacementFolder
+  .add(floor.material, "displacementScale")
+  .min(0)
+  .max(1)
+  .step(0.01)
+  .name("Scale");
+
+displacementFolder
+  .add(floor.material, "displacementBias")
+  .min(-1)
+  .max(1)
+  .step(0.01)
+  .name("Bias");
 
 // Add a reset button to the GUI
 gui.add({ reset: () => gui.reset() }, "reset").name("Reset To Default");
