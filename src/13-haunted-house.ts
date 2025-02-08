@@ -299,7 +299,7 @@ let timer = new Timer();
 
 const tick = () => {
   timer.update();
-  const elapsedTime = timer.getElapsed();
+  // const elapsedTime = timer.getElapsed();
 
   controls.update();
 
@@ -314,7 +314,7 @@ tick();
 const positionFolder = gui.addFolder("Position Controls");
 const displacementFolder = gui.addFolder("Displacement Controls");
 
-// Position controls
+// Light Position controls
 positionFolder
   .add(directionalLight.position, "x")
   .min(-100)
@@ -334,13 +334,13 @@ positionFolder
   .step(0.1)
   .name("Position Z");
 
+// Displacement controls
 displacementFolder
   .add(floor.material, "displacementScale")
   .min(0)
   .max(1)
   .step(0.01)
   .name("Scale");
-
 displacementFolder
   .add(floor.material, "displacementBias")
   .min(-1)
