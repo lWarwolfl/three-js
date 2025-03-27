@@ -342,6 +342,55 @@ doorLight.position.z = 2;
 doorLight.rotation.z = Math.PI / 2;
 scene.add(doorLight);
 
+const ghostMaterial = new THREE.MeshStandardMaterial({
+  color: "#ffffff",
+  emissive: "#ffffff",
+  transparent: true,
+  opacity: 0.2,
+});
+
+const ghost1Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost1SmallMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.1, 16, 16),
+  ghostMaterial
+);
+const ghost1Mesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.2, 16, 16),
+  ghostMaterial
+);
+
+const ghost1 = new THREE.Group();
+ghost1.add(ghost1Light, ghost1Mesh, ghost1SmallMesh);
+scene.add(ghost1);
+
+const ghost2Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost2SmallMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.12, 16, 16),
+  ghostMaterial
+);
+const ghost2Mesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.24, 16, 16),
+  ghostMaterial
+);
+
+const ghost2 = new THREE.Group();
+ghost2.add(ghost2Light, ghost2Mesh, ghost2SmallMesh);
+scene.add(ghost2);
+
+const ghost3Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost3SmallMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.14, 16, 16),
+  ghostMaterial
+);
+const ghost3Mesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.28, 16, 16),
+  ghostMaterial
+);
+
+const ghost3 = new THREE.Group();
+ghost3.add(ghost3Light, ghost3Mesh, ghost3SmallMesh);
+scene.add(ghost3);
+
 const ambientLight = new THREE.AmbientLight("#86cdff", 0.4);
 scene.add(ambientLight);
 
@@ -386,7 +435,19 @@ let timer = new Timer();
 
 const tick = () => {
   timer.update();
-  // const elapsedTime = timer.getElapsed();
+  const elapsedTime = timer.getElapsed();
+
+  ghost1.position.x = Math.cos(elapsedTime * 0.9) * 4;
+  ghost1.position.z = Math.sin(elapsedTime * 0.9) * 4;
+  ghost1.position.y = Math.sin(elapsedTime * 2) * 1.5 + 1;
+
+  ghost2.position.x = Math.sin(elapsedTime * 0.7) * 6;
+  ghost2.position.z = Math.cos(elapsedTime * 0.7) * 6;
+  ghost2.position.y = Math.sin(elapsedTime) * 1.7 + 1;
+
+  ghost3.position.x = Math.cos(elapsedTime * 0.5) * 8;
+  ghost3.position.z = Math.sin(elapsedTime * 0.5) * 8;
+  ghost3.position.y = Math.sin(elapsedTime * 0.7) * 2 + 1;
 
   controls.update();
 
