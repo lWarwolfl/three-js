@@ -321,10 +321,31 @@ const floor = new THREE.Mesh(
 floor.rotation.x += -Math.PI * 0.5;
 scene.add(floor);
 
-const ambientLight = new THREE.AmbientLight(0xeeffff, 0.4);
+const pointLight = new THREE.PointLight(0xff9000, 1.5, 0, 0.5);
+
+// const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
+// scene.add(pointLightHelper);
+
+const lightBulb = new THREE.Mesh(
+  new THREE.CapsuleGeometry(0.07, 0.3, 3, 20),
+  new THREE.MeshStandardMaterial({
+    roughness: 1,
+    emissive: "#FFEB66",
+    color: "#FFEB66",
+  })
+);
+
+const doorLight = new THREE.Group();
+doorLight.add(pointLight, lightBulb);
+doorLight.position.y = 2.3;
+doorLight.position.z = 2;
+doorLight.rotation.z = Math.PI / 2;
+scene.add(doorLight);
+
+const ambientLight = new THREE.AmbientLight("#86cdff", 0.4);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xeeffff, 1.2);
+const directionalLight = new THREE.DirectionalLight("#86cdff", 1.2);
 directionalLight.position.set(-99, 9, -18);
 scene.add(directionalLight);
 
