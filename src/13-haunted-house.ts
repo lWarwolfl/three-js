@@ -349,7 +349,7 @@ const ghostMaterial = new THREE.MeshStandardMaterial({
   opacity: 0.2,
 });
 
-const ghost1Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost1Light = new THREE.PointLight("#ffffff", 3, 2, 2);
 const ghost1SmallMesh = new THREE.Mesh(
   new THREE.SphereGeometry(0.1, 16, 16),
   ghostMaterial
@@ -363,13 +363,13 @@ const ghost1 = new THREE.Group();
 ghost1.add(ghost1Light, ghost1Mesh, ghost1SmallMesh);
 scene.add(ghost1);
 
-const ghost2Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost2Light = new THREE.PointLight("#ffffff", 3, 3, 2);
 const ghost2SmallMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.12, 16, 16),
+  new THREE.SphereGeometry(0.15, 16, 16),
   ghostMaterial
 );
 const ghost2Mesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.24, 16, 16),
+  new THREE.SphereGeometry(0.3, 16, 16),
   ghostMaterial
 );
 
@@ -377,13 +377,13 @@ const ghost2 = new THREE.Group();
 ghost2.add(ghost2Light, ghost2Mesh, ghost2SmallMesh);
 scene.add(ghost2);
 
-const ghost3Light = new THREE.PointLight("#ffffff", 3, 0, 2);
+const ghost3Light = new THREE.PointLight("#ffffff", 3, 4, 2);
 const ghost3SmallMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.14, 16, 16),
+  new THREE.SphereGeometry(0.2, 16, 16),
   ghostMaterial
 );
 const ghost3Mesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.28, 16, 16),
+  new THREE.SphereGeometry(0.4, 16, 16),
   ghostMaterial
 );
 
