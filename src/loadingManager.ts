@@ -11,17 +11,16 @@ export const startLoadingManager = () => {
   const load: LoadFunctionType = (_, itemsLoaded, itemsTotal) => {
     const progress = itemsLoaded / itemsTotal;
     const percentage = parseFloat(progress.toFixed(2)) * 100;
-    console.log(itemsTotal);
 
     if (percentageContainer)
       percentageContainer.innerHTML = `${
-        percentage / 1 >= 1
+        percentage >= 1
           ? percentage / 10 >= 1
             ? percentage / 100 >= 1
-              ? percentage
+              ? "100"
               : "0" + percentage
             : "00" + percentage
-          : "000" + percentage
+          : "000"
       }%`;
 
     if (progress === 1 || itemsTotal === 0) {
