@@ -1,6 +1,6 @@
 import * as dat from "lil-gui";
 import * as THREE from "three";
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Sky, Timer } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { startLoadingManager } from "./loadingManager";
 
@@ -321,7 +321,7 @@ const floor = new THREE.Mesh(
 floor.rotation.x += -Math.PI * 0.5;
 scene.add(floor);
 
-const pointLight = new THREE.PointLight(0xff9000, 1.5, 0, 0.5);
+const pointLight = new THREE.PointLight(0xff9000, 1.5, 0, 1);
 
 // const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
 // scene.add(pointLightHelper);
@@ -346,7 +346,7 @@ const ghostMaterial = new THREE.MeshStandardMaterial({
   color: "#ffffff",
   emissive: "#ffffff",
   transparent: true,
-  opacity: 0.2,
+  opacity: 0.05,
 });
 
 const ghost1Material = new THREE.MeshStandardMaterial({
@@ -409,12 +409,17 @@ const ghost3 = new THREE.Group();
 ghost3.add(ghost3Light, ghost3Mesh, ghost3SmallMesh);
 scene.add(ghost3);
 
-const ambientLight = new THREE.AmbientLight("#86cdff", 0.4);
+const ambientLight = new THREE.AmbientLight("#86cdff", 0.3);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight("#86cdff", 1.2);
-directionalLight.position.set(-99, 9, -18);
+const directionalLight = new THREE.DirectionalLight("#86cdff", 0.8);
+directionalLight.position.set(8, 7, 8);
 scene.add(directionalLight);
+
+// const directionalLightHelper = new THREE.CameraHelper(
+//   directionalLight.shadow.camera
+// );
+// scene.add(directionalLightHelper);
 
 const sizes = {
   width: window.innerWidth,
@@ -447,14 +452,82 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const canvas = document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, canvas);
+controls.maxTargetRadius = 7;
+controls.maxPolarAngle = Math.PI / 2.3;
+controls.minDistance = 5;
+controls.maxDistance = 20;
 controls.enableDamping = true;
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+directionalLight.castShadow = true;
+ghost1Light.castShadow = true;
+ghost2Light.castShadow = true;
+ghost3Light.castShadow = true;
+pointLight.castShadow = true;
+
+bush1.castShadow = true;
+bush2.castShadow = true;
+bush3.castShadow = true;
+bush4.castShadow = true;
+
+walls.castShadow = true;
+walls.receiveShadow = true;
+
+roof.castShadow = true;
+roof.receiveShadow = true;
+
+floor.receiveShadow = true;
+
+for (const grave of graves.children) {
+  grave.castShadow = true;
+  grave.receiveShadow = true;
+}
+
+directionalLight.shadow.mapSize.width = 256;
+directionalLight.shadow.mapSize.height = 256;
+directionalLight.shadow.camera.top = 8;
+directionalLight.shadow.camera.right = 11;
+directionalLight.shadow.camera.bottom = -8;
+directionalLight.shadow.camera.left = -11;
+directionalLight.shadow.camera.near = 1;
+directionalLight.shadow.camera.far = 20;
+
+pointLight.shadow.mapSize.width = 256;
+pointLight.shadow.mapSize.height = 256;
+pointLight.shadow.camera.far = 15;
+
+ghost1Light.shadow.mapSize.width = 256;
+ghost1Light.shadow.mapSize.height = 256;
+ghost1Light.shadow.camera.far = 8;
+
+ghost2Light.shadow.mapSize.width = 256;
+ghost2Light.shadow.mapSize.height = 256;
+ghost2Light.shadow.camera.far = 8;
+
+ghost3Light.shadow.mapSize.width = 256;
+ghost3Light.shadow.mapSize.height = 256;
+ghost3Light.shadow.camera.far = 8;
+
+const sky = new Sky();
+sky.scale.set(100, 100, 100);
+sky.material.uniforms["turbidity"].value = 10;
+sky.material.uniforms["rayleigh"].value = 3;
+sky.material.uniforms["mieCoefficient"].value = 0.1;
+sky.material.uniforms["mieDirectionalG"].value = 0.95;
+sky.material.uniforms["sunPosition"].value.set(0, -0.038, 0.7);
+scene.add(sky);
+
+scene.fog = new THREE.FogExp2("#04343f", 0.05);
 
 let timer = new Timer();
 
 function getAnimatedOpacity(angle: number) {
   return (
-    Math.abs(Math.sin(angle) * Math.sin(2.2 * angle) * Math.sin(3.3 * angle)) +
-    0.1
+    (Math.abs(Math.sin(angle) * Math.sin(2.2 * angle) * Math.sin(3.3 * angle)) +
+      0.1) /
+    2
   );
 }
 
@@ -462,19 +535,22 @@ const tick = () => {
   timer.update();
   const elapsedTime = timer.getElapsed();
 
-  ghost1.position.x = Math.cos(elapsedTime * 0.9) * 4;
-  ghost1.position.z = Math.sin(elapsedTime * 0.9) * 4;
-  ghost1.position.y = Math.sin(elapsedTime * 2) * 1.5 + 1;
+  const ghost1Angle = elapsedTime * 0.7;
+  ghost1.position.x = Math.cos(ghost1Angle) * 4;
+  ghost1.position.z = Math.sin(ghost1Angle) * 4;
+  ghost1.position.y = Math.sin(ghost1Angle) * 1.5 + 1;
   ghost1Material.opacity = getAnimatedOpacity(elapsedTime * 1.3);
 
-  ghost2.position.x = Math.cos(-elapsedTime * 0.7) * 6;
-  ghost2.position.z = Math.sin(-elapsedTime * 0.7) * 6;
-  ghost2.position.y = Math.sin(elapsedTime) * 1.7 + 1;
+  const ghost2Angle = -elapsedTime * 0.5;
+  ghost2.position.x = Math.cos(ghost2Angle) * 6;
+  ghost2.position.z = Math.sin(ghost2Angle) * 6;
+  ghost2.position.y = Math.sin(ghost2Angle) * 1.7 + 1;
   ghost2Material.opacity = getAnimatedOpacity(elapsedTime * 1);
 
-  ghost3.position.x = Math.cos(elapsedTime * 0.5) * 8;
-  ghost3.position.z = Math.sin(elapsedTime * 0.5) * 8;
-  ghost3.position.y = Math.sin(elapsedTime * 0.7) * 2 + 1;
+  const ghost3Angle = elapsedTime * 0.3;
+  ghost3.position.x = Math.cos(ghost3Angle) * 8;
+  ghost3.position.z = Math.sin(ghost3Angle) * 8;
+  ghost3.position.y = Math.sin(ghost3Angle) * 2 + 1;
   ghost3Material.opacity = getAnimatedOpacity(elapsedTime * 0.7);
 
   controls.update();
