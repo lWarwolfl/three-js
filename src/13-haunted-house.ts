@@ -134,6 +134,50 @@ bushARMTexture.wrapS = THREE.RepeatWrapping;
 bushNormalTexture.repeat.set(2, 1);
 bushNormalTexture.wrapS = THREE.RepeatWrapping;
 
+//Grave textures
+const graveColorTexture = textureLoader.load(
+  "/textures/haunted-house/grave/diff.jpg"
+);
+const graveARMTexture = textureLoader.load(
+  "/textures/haunted-house/grave/arm.jpg"
+);
+const graveNormalTexture = textureLoader.load(
+  "/textures/haunted-house/grave/nor.jpg"
+);
+
+graveColorTexture.repeat.set(0.3, 1);
+graveColorTexture.wrapS = THREE.RepeatWrapping;
+graveColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+graveARMTexture.repeat.set(0.3, 1);
+graveARMTexture.wrapS = THREE.RepeatWrapping;
+
+graveNormalTexture.repeat.set(0.3, 1);
+graveNormalTexture.wrapS = THREE.RepeatWrapping;
+
+const doorColorTexture = textureLoader.load(
+  "/textures/haunted-house/door/color.jpg"
+);
+doorColorTexture.colorSpace = THREE.SRGBColorSpace;
+const doorHeightTexture = textureLoader.load(
+  "/textures/haunted-house/door/height.jpg"
+);
+const doorAlphaTexture = textureLoader.load(
+  "/textures/haunted-house/door/alpha.jpg"
+);
+const doorAmbientOcclusionTexture = textureLoader.load(
+  "/textures/haunted-house/door/ambientOcclusion.jpg"
+);
+const doorMetalnessTexture = textureLoader.load(
+  "/textures/haunted-house/door/metalness.jpg"
+);
+const doorNormalTexture = textureLoader.load(
+  "/textures/haunted-house/door/normal.jpg"
+);
+const doorRoughnessTexture = textureLoader.load(
+  "/textures/haunted-house/door/roughness.jpg"
+);
+
 const house = new THREE.Group();
 
 const walls = new THREE.Mesh(
@@ -171,8 +215,24 @@ const roof = new THREE.Mesh(
 roof.position.y += wallsMeasurements.height + roofMeasurements.height * 0.5;
 
 const door = new THREE.Mesh(
-  new THREE.PlaneGeometry(doorMeasurements.width, doorMeasurements.height),
-  new THREE.MeshStandardMaterial({ color: "red" })
+  new THREE.PlaneGeometry(
+    doorMeasurements.width,
+    doorMeasurements.height,
+    30,
+    30
+  ),
+  new THREE.MeshStandardMaterial({
+    transparent: true,
+    map: doorColorTexture,
+    aoMap: doorAmbientOcclusionTexture,
+    roughnessMap: doorRoughnessTexture,
+    metalnessMap: doorMetalnessTexture,
+    normalMap: doorNormalTexture,
+    alphaMap: doorAlphaTexture,
+    displacementMap: doorHeightTexture,
+    displacementScale: 0.15,
+    displacementBias: -0.04,
+  })
 );
 door.position.y = doorMeasurements.height * 0.5;
 door.position.z = wallsMeasurements.width * 0.5 + 0.01;
@@ -211,7 +271,13 @@ house.add(walls, roof, door, bush1, bush2, bush3, bush4);
 scene.add(house);
 
 const graveGeometry = new THREE.BoxGeometry(0.9, 1.2, 0.25);
-const graveMaterial = new THREE.MeshStandardMaterial();
+const graveMaterial = new THREE.MeshStandardMaterial({
+  map: graveColorTexture,
+  aoMap: graveARMTexture,
+  roughnessMap: graveARMTexture,
+  metalnessMap: graveARMTexture,
+  normalMap: graveNormalTexture,
+});
 
 const graves = new THREE.Group();
 

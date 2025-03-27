@@ -28,25 +28,6 @@ colorTexture.generateMipmaps = false;
 // colorTexture.center.x = 0.5;
 // colorTexture.center.y = 0.5;
 
-// const heightTexture = textureLoader.load(
-//   "/textures/door/height.jpg"
-// );
-// const alphaTexture = textureLoader.load(
-//   "/textures/door/alpha.jpg"
-// );
-// const ambientOcclusionTexture = textureLoader.load(
-//   "/textures/door/ambientOcclusion.jpg"
-// );
-// const metalnessTexture = textureLoader.load(
-//   "/textures/door/metalness.jpg"
-// );
-// const normalTexture = textureLoader.load(
-//   "/textures/door/normal.jpg"
-// );
-// const roughnessTexture = textureLoader.load(
-//   "/textures/door/roughness.jpg"
-// );
-
 const scene = new THREE.Scene();
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
