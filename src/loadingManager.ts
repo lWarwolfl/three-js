@@ -18,8 +18,8 @@ export const startLoadingManager = () => {
           ? percentage / 10 >= 1
             ? percentage / 100 >= 1
               ? "100"
-              : "0" + percentage
-            : "00" + percentage
+              : "0" + Math.floor(percentage)
+            : "00" + Math.floor(percentage)
           : "000"
       }%`;
 
