@@ -342,71 +342,13 @@ doorLight.position.z = 2;
 doorLight.rotation.z = Math.PI / 2;
 scene.add(doorLight);
 
-const ghostMaterial = new THREE.MeshStandardMaterial({
-  color: "#ffffff",
-  emissive: "#ffffff",
-  transparent: true,
-  opacity: 0.05,
-});
-
-const ghost1Material = new THREE.MeshStandardMaterial({
-  color: "#ffffff",
-  emissive: "#ffffff",
-  transparent: true,
-  opacity: 0.2,
-});
-const ghost1Light = new THREE.PointLight("#ffffff", 3, 2, 2);
-const ghost1SmallMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.1, 16, 16),
-  ghost1Material
-);
-const ghost1Mesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.2, 16, 16),
-  ghostMaterial
-);
-
-const ghost1 = new THREE.Group();
-ghost1.add(ghost1Light, ghost1Mesh, ghost1SmallMesh);
+const ghost1 = new THREE.PointLight("#ffffff", 1, 1, 2);
 scene.add(ghost1);
 
-const ghost2Material = new THREE.MeshStandardMaterial({
-  color: "#ffffff",
-  emissive: "#ffffff",
-  transparent: true,
-  opacity: 0.2,
-});
-const ghost2Light = new THREE.PointLight("#ffffff", 3, 3, 2);
-const ghost2SmallMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.15, 16, 16),
-  ghost2Material
-);
-const ghost2Mesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.3, 16, 16),
-  ghostMaterial
-);
-
-const ghost2 = new THREE.Group();
-ghost2.add(ghost2Light, ghost2Mesh, ghost2SmallMesh);
+const ghost2 = new THREE.PointLight("#ffffff", 1.5, 1.5, 2);
 scene.add(ghost2);
 
-const ghost3Material = new THREE.MeshStandardMaterial({
-  color: "#ffffff",
-  emissive: "#ffffff",
-  transparent: true,
-  opacity: 0.2,
-});
-const ghost3Light = new THREE.PointLight("#ffffff", 3, 4, 2);
-const ghost3SmallMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.2, 16, 16),
-  ghost3Material
-);
-const ghost3Mesh = new THREE.Mesh(
-  new THREE.SphereGeometry(0.4, 16, 16),
-  ghostMaterial
-);
-
-const ghost3 = new THREE.Group();
-ghost3.add(ghost3Light, ghost3Mesh, ghost3SmallMesh);
+const ghost3 = new THREE.PointLight("#ffffff", 2, 2, 2);
 scene.add(ghost3);
 
 const ambientLight = new THREE.AmbientLight("#86cdff", 0.3);
@@ -462,9 +404,6 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 
 directionalLight.castShadow = true;
-ghost1Light.castShadow = true;
-ghost2Light.castShadow = true;
-ghost3Light.castShadow = true;
 pointLight.castShadow = true;
 
 bush1.castShadow = true;
@@ -498,18 +437,6 @@ pointLight.shadow.mapSize.width = 256;
 pointLight.shadow.mapSize.height = 256;
 pointLight.shadow.camera.far = 15;
 
-ghost1Light.shadow.mapSize.width = 256;
-ghost1Light.shadow.mapSize.height = 256;
-ghost1Light.shadow.camera.far = 8;
-
-ghost2Light.shadow.mapSize.width = 256;
-ghost2Light.shadow.mapSize.height = 256;
-ghost2Light.shadow.camera.far = 8;
-
-ghost3Light.shadow.mapSize.width = 256;
-ghost3Light.shadow.mapSize.height = 256;
-ghost3Light.shadow.camera.far = 8;
-
 const sky = new Sky();
 sky.scale.set(100, 100, 100);
 sky.material.uniforms["turbidity"].value = 10;
@@ -523,12 +450,8 @@ scene.fog = new THREE.FogExp2("#04343f", 0.05);
 
 let timer = new Timer();
 
-function getAnimatedOpacity(angle: number) {
-  return (
-    (Math.abs(Math.sin(angle) * Math.sin(2.2 * angle) * Math.sin(3.3 * angle)) +
-      0.1) /
-    2
-  );
+function getAnimatedHeight(angle: number) {
+  return Math.sin(angle) * Math.sin(2.2 * angle) * Math.sin(3.3 * angle);
 }
 
 const tick = () => {
@@ -538,20 +461,17 @@ const tick = () => {
   const ghost1Angle = elapsedTime * 0.7;
   ghost1.position.x = Math.cos(ghost1Angle) * 4;
   ghost1.position.z = Math.sin(ghost1Angle) * 4;
-  ghost1.position.y = Math.sin(ghost1Angle) * 1.5 + 1;
-  ghost1Material.opacity = getAnimatedOpacity(elapsedTime * 1.3);
+  ghost1.position.y = getAnimatedHeight(ghost1Angle);
 
   const ghost2Angle = -elapsedTime * 0.5;
   ghost2.position.x = Math.cos(ghost2Angle) * 6;
   ghost2.position.z = Math.sin(ghost2Angle) * 6;
-  ghost2.position.y = Math.sin(ghost2Angle) * 1.7 + 1;
-  ghost2Material.opacity = getAnimatedOpacity(elapsedTime * 1);
+  ghost2.position.y = getAnimatedHeight(ghost2Angle);
 
   const ghost3Angle = elapsedTime * 0.3;
   ghost3.position.x = Math.cos(ghost3Angle) * 8;
   ghost3.position.z = Math.sin(ghost3Angle) * 8;
-  ghost3.position.y = Math.sin(ghost3Angle) * 2 + 1;
-  ghost3Material.opacity = getAnimatedOpacity(elapsedTime * 0.7);
+  ghost3.position.y = getAnimatedHeight(ghost3Angle);
 
   controls.update();
 
