@@ -18,6 +18,7 @@ export default defineConfig({
         lights: "11-lights.html",
         shadows: "12-shadows.html",
         hauntedHouse: "13-haunted-house.html",
+        particles: "14-particles.html",
         love: "love.html",
       },
     },
