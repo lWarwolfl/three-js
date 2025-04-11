@@ -19,6 +19,7 @@ export default defineConfig({
         shadows: "12-shadows.html",
         hauntedHouse: "13-haunted-house.html",
         particles: "14-particles.html",
+        galaxyGenerator: "15-galaxy-generator.html",
         love: "love.html",
       },
     },
