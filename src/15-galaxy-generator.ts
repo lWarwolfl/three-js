@@ -2,60 +2,95 @@ import * as dat from "lil-gui";
 import * as THREE from "three";
 import { Timer } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { startLoadingManager } from "./loadingManager";
 
 const gui = new dat.GUI();
 
-const params = {
-  count: 700,
-};
-
 const scene = new THREE.Scene();
 
-const loadingManger = startLoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const parameters = {
+  count: 20000,
+  size: 0.02,
+  radius: 4,
+  branches: 7,
+  spin: 1.5,
+  randomness: 0.2,
+  concenteration: 3,
+  insideColor: "#ff6030",
+  outsideColor: "#1b3984",
+};
 
-//Floor textures
-const floorAlphaTexture = textureLoader.load(
-  "/textures/haunted-house/floor/alpha.jpg"
-);
+let geometry: THREE.BufferGeometry | null = null;
+let material: THREE.PointsMaterial | null = null;
+let points: THREE.Points | null = null;
 
-const particleGeometry = new THREE.BufferGeometry();
-const radius = 2;
-const positionsArray = new Float32Array(params.count * 3);
+const generateGalaxy = () => {
+  if (points !== null) {
+    geometry?.dispose();
+    material?.dispose();
+    scene.remove(points);
+  }
 
-for (let i = 0; i < params.count; i++) {
-  // Generate a random point inside a sphere using spherical coordinates and random radius
-  const u = Math.random();
-  const v = Math.random();
-  const w = Math.random();
+  geometry = new THREE.BufferGeometry();
 
-  const theta = 2 * Math.PI * u;
-  const phi = Math.acos(2 * v - 1);
-  const r = radius * Math.cbrt(w); // cube root ensures uniform volume distribution
+  let vertexes = new Float32Array(parameters.count * 3);
+  const colors = new Float32Array(parameters.count * 3);
 
-  const x = r * Math.sin(phi) * Math.cos(theta);
-  const y = r * Math.sin(phi) * Math.sin(theta);
-  const z = r * Math.cos(phi);
+  const colorInside = new THREE.Color(parameters.insideColor);
+  const colorOutside = new THREE.Color(parameters.outsideColor);
 
-  positionsArray[i * 3 + 0] = x;
-  positionsArray[i * 3 + 1] = y;
-  positionsArray[i * 3 + 2] = z;
-}
+  for (let i = 0; i < parameters.count; i++) {
+    const i3 = i * 3;
 
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-particleGeometry.setAttribute("position", positionsAttribute);
+    const radius = Math.random() * parameters.radius;
+    const spinAngle = radius * parameters.spin;
+    const branchAngle =
+      ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
 
-const particleMaterial = new THREE.PointsMaterial({
-  color: "#eee",
-  size: 0.07,
-  sizeAttenuation: true,
-  alphaMap: floorAlphaTexture,
-  transparent: true,
-  depthWrite: false,
-});
-const particle = new THREE.Points(particleGeometry, particleMaterial);
-scene.add(particle);
+    const randomX =
+      Math.pow(Math.random(), parameters.concenteration) *
+      (Math.random() < 0.5 ? 1 : -1) *
+      parameters.randomness *
+      radius;
+    const randomY =
+      Math.pow(Math.random(), parameters.concenteration) *
+      (Math.random() < 0.5 ? 1 : -1) *
+      parameters.randomness *
+      radius;
+    const randomZ =
+      Math.pow(Math.random(), parameters.concenteration) *
+      (Math.random() < 0.5 ? 1 : -1) *
+      parameters.randomness *
+      radius;
+
+    vertexes[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+    vertexes[i3 + 1] = randomY;
+    vertexes[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+    const mixedColor = colorInside.clone();
+    mixedColor.lerp(colorOutside, radius / parameters.radius);
+
+    colors[i3 + 0] = mixedColor.r;
+    colors[i3 + 1] = mixedColor.g;
+    colors[i3 + 2] = mixedColor.b;
+  }
+
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertexes, 3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  material = new THREE.PointsMaterial({
+    size: parameters.size,
+    sizeAttenuation: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    vertexColors: true,
+  });
+
+  points = new THREE.Points(geometry, material);
+
+  scene.add(points);
+};
+
+generateGalaxy();
 
 const sizes = {
   width: window.innerWidth,
@@ -70,7 +105,6 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.y = 2;
 camera.position.z = 5;
-camera.lookAt(particle.position);
 scene.add(camera);
 
 window.addEventListener("resize", () => {
@@ -88,9 +122,9 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const canvas = document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, canvas);
-controls.maxTargetRadius = 7;
 controls.minDistance = 3.5;
 controls.maxDistance = 10;
+controls.enablePan = false;
 controls.enableDamping = true;
 
 let timer = new Timer();
@@ -99,14 +133,7 @@ const tick = () => {
   timer.update();
   const elapsedTime = timer.getElapsed();
 
-  for (let i = 0; i < params.count; i++) {
-    const i3 = i * 3;
-
-    particleGeometry.attributes.position.array[i3 + 1] = Math.sin(
-      elapsedTime + i3
-    );
-  }
-  particleGeometry.attributes.position.needsUpdate = true;
+  if (points) points.rotation.y = elapsedTime * 0.08;
 
   controls.update();
 
@@ -117,7 +144,65 @@ const tick = () => {
 
 tick();
 
-gui.add(particleMaterial, "size", 0.01, 0.2, 0.01).name("Particle Size");
+gui
+  .add(parameters, "count")
+  .min(100)
+  .max(100000)
+  .step(100)
+  .name("Particle Count")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "size")
+  .min(0.001)
+  .max(0.1)
+  .step(0.001)
+  .name("Particle Size")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "radius")
+  .min(1)
+  .max(20)
+  .step(0.5)
+  .name("Galaxy Radius")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "branches")
+  .min(4)
+  .max(20)
+  .step(1)
+  .name("Galaxy Branches")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "spin")
+  .min(-5)
+  .max(5)
+  .step(0.1)
+  .name("Galaxy Spin")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "randomness")
+  .min(0.1)
+  .max(2)
+  .step(0.1)
+  .name("Randomness")
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(parameters, "concenteration")
+  .min(2)
+  .max(10)
+  .step(1)
+  .name("Concenteration")
+  .onFinishChange(generateGalaxy);
+
+gui.addColor(parameters, "insideColor").onFinishChange(generateGalaxy);
+
+gui.addColor(parameters, "outsideColor").onFinishChange(generateGalaxy);
 
 // Add a reset button to the GUI
 gui.add({ reset: () => gui.reset() }, "reset").name("Reset To Default");
