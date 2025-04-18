@@ -108,13 +108,10 @@ const canvas = document.body.appendChild(renderer.domElement);
 canvas.className = "fixed-canvas";
 
 let timer = new Timer();
-let previousTime = 0;
 
 const tick = () => {
   timer.update();
   const elapsedTime = timer.getElapsed();
-  const deltaTime = elapsedTime - previousTime;
-  previousTime = elapsedTime;
 
   const mildHeight = -scrollY / sizes.height;
 
