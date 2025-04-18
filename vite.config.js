@@ -20,6 +20,7 @@ export default defineConfig({
         hauntedHouse: "13-haunted-house.html",
         particles: "14-particles.html",
         galaxyGenerator: "15-galaxy-generator.html",
+        scrollBasedAnimations: "16-scroll-based-animations.html",
         love: "love.html",
       },
     },
