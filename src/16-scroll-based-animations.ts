@@ -3,8 +3,6 @@ import * as THREE from "three";
 import { Timer } from "three/examples/jsm/Addons.js";
 import { startLoadingManager } from "./loadingManager";
 
-const parameters = { materialColor: "#d4d4d4" };
-
 const gui = new dat.GUI();
 
 const scene = new THREE.Scene();
@@ -16,7 +14,7 @@ const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
 gradientTexture.magFilter = THREE.NearestFilter;
 
 const material = new THREE.MeshToonMaterial({
-  color: parameters.materialColor,
+  color: "#d4d4d4",
   gradientMap: gradientTexture,
 });
 
@@ -54,7 +52,7 @@ particlesGeometry.setAttribute(
 );
 
 const particlesMaterial = new THREE.PointsMaterial({
-  color: parameters.materialColor,
+  color: "#d4d4d4",
   sizeAttenuation: true,
   size: 0.04,
 });
@@ -131,10 +129,8 @@ const tick = () => {
 
 tick();
 
-gui.addColor(material, "color");
+gui.addColor(material, "color").name("Mesh Color");
+gui.addColor(particlesMaterial, "color").name("Particle Color");
 
 // Add a reset button to the GUI
-gui.addColor(parameters, "materialColor").onChange(() => {
-  material.color.set(parameters.materialColor);
-  particlesMaterial.color.set(parameters.materialColor);
-});
+gui.add({ reset: () => gui.reset() }, "reset").name("Reset To Default");
