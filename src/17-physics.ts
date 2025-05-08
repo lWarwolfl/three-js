@@ -39,6 +39,7 @@ const environmentMapTexture = cubeTextureLoader.load([
   "/textures/environmentMaps/0/pz.png",
   "/textures/environmentMaps/0/nz.png",
 ]);
+environmentMapTexture.colorSpace = THREE.SRGBColorSpace;
 
 const standardMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.2,
