@@ -17,7 +17,7 @@ const concreteMaterial = new CANNON.Material("concrete");
 const plasticMaterial = new CANNON.Material("plastic");
 const metalMaterial = new CANNON.Material("metal");
 
-const defaultMaterial = new CANNON.Material("default");
+// const defaultMaterial = new CANNON.Material("default");
 const defaultContactMaterial = new CANNON.ContactMaterial(
   concreteMaterial,
   plasticMaterial,
