@@ -181,11 +181,10 @@ createBox(0.8, new THREE.Vector3(2, 2, -2));
 createBox(0.8, new THREE.Vector3(-2, 2, -2));
 
 const plane = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10).center(),
+  new THREE.BoxGeometry(10, 0.05, 10).center(),
   standardMaterial
 );
-plane.position.y = -1;
-plane.rotation.x = -Math.PI / 2;
+plane.position.y = -1.05;
 
 const floorShape = new CANNON.Box(new CANNON.Vec3(5, 5, 0.1));
 const floorBody = new CANNON.Body({
@@ -324,8 +323,9 @@ gui
           scene.remove(mesh);
           body.removeEventListener("collide", playHitSound);
           world.removeBody(body);
-          renderer.renderLists.dispose();
-          objectsToUpdate.splice(0, objectsToUpdate.length);
+          setTimeout(() => {
+            objectsToUpdate.splice(0, objectsToUpdate.length);
+          }, 100);
         }
       },
     },
