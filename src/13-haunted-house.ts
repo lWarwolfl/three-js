@@ -8,8 +8,8 @@ const gui = new dat.GUI();
 
 const scene = new THREE.Scene();
 
-const loadingManger = startLoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const loadingManager = startLoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const wallsMeasurements = {
   width: 4,

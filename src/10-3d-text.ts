@@ -6,9 +6,9 @@ import {
 } from "three/examples/jsm/Addons.js";
 import { startLoadingManager } from "./loadingManager";
 
-const loadingManger = startLoadingManager();
+const loadingManager = startLoadingManager();
 
-// const textureLoader = new THREE.TextureLoader(loadingManger);
+// const textureLoader = new THREE.TextureLoader(loadingManager);
 
 // const matcapTexture = textureLoader.load("/textures/matcaps/9.png");
 // matcapTexture.colorSpace = THREE.SRGBColorSpace;
@@ -19,7 +19,7 @@ const scene = new THREE.Scene();
 
 const normalMaterial = new THREE.MeshNormalMaterial();
 
-const fontLoader = new FontLoader(loadingManger);
+const fontLoader = new FontLoader(loadingManager);
 fontLoader.load("/fonts/DM_Mono_Regular.json", (font) => {
   const textGeometry = new TextGeometry("Hello Three.js", {
     font: font,

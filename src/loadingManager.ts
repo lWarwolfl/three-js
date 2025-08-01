@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export const startLoadingManager = () => {
-  const loadingManger = new THREE.LoadingManager();
+  const loadingManager = new THREE.LoadingManager();
   document.body.classList.add("loading");
   const loadingContainer = document.getElementById("loading-container");
   const percentageContainer = document.getElementById("percentage");
@@ -38,8 +38,8 @@ export const startLoadingManager = () => {
     }
   };
 
-  loadingManger.onStart = load;
-  loadingManger.onProgress = load;
+  loadingManager.onStart = load;
+  loadingManager.onProgress = load;
 
-  return loadingManger;
+  return loadingManager;
 };

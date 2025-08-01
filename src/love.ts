@@ -5,13 +5,13 @@ import {
   TextGeometry,
 } from "three/examples/jsm/Addons.js";
 
-const loadingManger = new THREE.LoadingManager();
+const loadingManager = new THREE.LoadingManager();
 
 document.body.classList.add("loading");
 const loadingContainer = document.getElementById("loading-container");
 const percentageContainer = document.getElementById("percentage");
 
-loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
+loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
   const progress = itemsLoaded / itemsTotal;
   const percentage = parseFloat(progress.toFixed(2)) * 100;
 
@@ -41,7 +41,7 @@ loadingManger.onProgress = (_, itemsLoaded, itemsTotal) => {
   }
 };
 
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const minecraftColorTexture = textureLoader.load("/textures/minecraft.jpeg");
 minecraftColorTexture.colorSpace = THREE.SRGBColorSpace;
@@ -107,7 +107,7 @@ const normalMaterial = new THREE.MeshNormalMaterial();
 //   thickness: 1,
 // });
 
-const fontLoader = new FontLoader(loadingManger);
+const fontLoader = new FontLoader(loadingManager);
 fontLoader.load("/fonts/DM_Mono_Regular.json", (font) => {
   const textGeometry = new TextGeometry("I'm Sorry :(", {
     font: font,

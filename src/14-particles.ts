@@ -12,8 +12,8 @@ const params = {
 
 const scene = new THREE.Scene();
 
-const loadingManger = startLoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const loadingManager = startLoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 //Floor textures
 const floorAlphaTexture = textureLoader.load(

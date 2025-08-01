@@ -5,9 +5,9 @@ import { startLoadingManager } from "./loadingManager";
 
 const gui = new dat.GUI();
 
-const loadingManger = startLoadingManager();
+const loadingManager = startLoadingManager();
 
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const minecraftColorTexture = textureLoader.load("/textures/minecraft.jpeg");
 minecraftColorTexture.colorSpace = THREE.SRGBColorSpace;
@@ -100,7 +100,7 @@ pointLight.position.y = 5;
 pointLight.lookAt(group.position);
 scene.add(pointLight);
 
-const rgbeLoader = new RGBELoader(loadingManger);
+const rgbeLoader = new RGBELoader(loadingManager);
 rgbeLoader.load("/textures/environmentMap/2k.hdr", (environmentMap) => {
   environmentMap.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = environmentMap;

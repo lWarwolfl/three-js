@@ -11,9 +11,9 @@ import { startLoadingManager } from "./loadingManager";
 //   texture.needsUpdate = true;
 // };
 
-const loadingManger = startLoadingManager();
+const loadingManager = startLoadingManager();
 
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const textureLoader = new THREE.TextureLoader(loadingManager);
 const colorTexture = textureLoader.load("/textures/minecraft.jpeg");
 colorTexture.colorSpace = THREE.SRGBColorSpace;
 colorTexture.magFilter = THREE.NearestFilter;

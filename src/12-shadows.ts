@@ -7,9 +7,9 @@ const gui = new dat.GUI();
 
 const scene = new THREE.Scene();
 
-const loadingManger = startLoadingManager();
+const loadingManager = startLoadingManager();
 
-const textureLoader = new THREE.TextureLoader(loadingManger);
+const textureLoader = new THREE.TextureLoader(loadingManager);
 const bakedShadow = textureLoader.load("/shadow/bakedShadow.jpg");
 const simpleShadow = textureLoader.load("/shadow/simpleShadow.jpg");
 bakedShadow.colorSpace = THREE.SRGBColorSpace;
