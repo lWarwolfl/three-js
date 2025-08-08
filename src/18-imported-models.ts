@@ -1,6 +1,10 @@
 import * as dat from "lil-gui";
 import * as THREE from "three";
-import { GLTFLoader, OrbitControls } from "three/examples/jsm/Addons.js";
+import {
+  DRACOLoader,
+  GLTFLoader,
+  OrbitControls,
+} from "three/examples/jsm/Addons.js";
 import { startLoadingManager } from "./loadingManager";
 
 const gui = new dat.GUI();
@@ -8,8 +12,11 @@ const gui = new dat.GUI();
 const scene = new THREE.Scene();
 
 const loadingManager = startLoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManager);
+// const textureLoader = new THREE.TextureLoader(loadingManager);
+const dracoLoader = new DRACOLoader(loadingManager);
+dracoLoader.setDecoderPath("/draco/");
 const gltfLoader = new GLTFLoader(loadingManager);
+gltfLoader.setDRACOLoader(dracoLoader);
 // const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
 const standardMaterial = new THREE.MeshStandardMaterial({
@@ -38,8 +45,26 @@ directionalLight.position.set(1, 2, 0);
 scene.add(directionalLight);
 
 // 3D Model Import
-const duckModel = gltfLoader.load("/models/Duck/glTF/Duck.gltf", (res) => {
-  console.log(res);
+let mixer: THREE.AnimationMixer | null;
+
+gltfLoader.load("/models/Fox/glTF/Fox.gltf", (res) => {
+  const model = res.scene;
+  mixer = new THREE.AnimationMixer(model);
+  const action = mixer.clipAction(res.animations[0]);
+
+  action.play();
+
+  model.scale.set(0.03, 0.03, 0.03);
+  model.position.y = -1.02;
+
+  model.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = false;
+    }
+  });
+
+  scene.add(model);
 });
 
 // Scene Config
@@ -89,13 +114,15 @@ directionalLight.shadow.camera.left = -11;
 directionalLight.shadow.camera.near = 1;
 directionalLight.shadow.camera.far = 20;
 
-// let clock = new THREE.Clock();
-// let oldElapsedTime = 0;
+let clock = new THREE.Clock();
+let oldElapsedTime = 0;
 
 const tick = () => {
-  // const elapsedTime = clock.getElapsedTime();
-  // const deltaTime = elapsedTime - oldElapsedTime;
-  // oldElapsedTime = elapsedTime;
+  const elapsedTime = clock.getElapsedTime();
+  const deltaTime = elapsedTime - oldElapsedTime;
+  oldElapsedTime = elapsedTime;
+
+  if (mixer) mixer.update(deltaTime);
 
   controls.update();
 
