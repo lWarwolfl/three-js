@@ -48,7 +48,6 @@ world.addContactMaterial(metalConcereteContactMaterial);
 world.addContactMaterial(metalPlasticContactMaterial);
 
 const loadingManager = startLoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManager);
 const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
 const environmentMapTexture = cubeTextureLoader.load([
