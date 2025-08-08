@@ -51,9 +51,6 @@ const loadingManager = startLoadingManager();
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
-const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
-gradientTexture.magFilter = THREE.NearestFilter;
-
 const environmentMapTexture = cubeTextureLoader.load([
   "/textures/environmentMaps/0/px.png",
   "/textures/environmentMaps/0/nx.png",

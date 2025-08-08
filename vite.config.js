@@ -22,6 +22,7 @@ export default defineConfig({
         galaxyGenerator: "15-galaxy-generator.html",
         scrollBasedAnimations: "16-scroll-based-animations.html",
         physics: "17-physics.html",
+        importedModels: "18-imported-models.html",
         love: "love.html",
       },
     },
