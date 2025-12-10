@@ -23,6 +23,7 @@ export default defineConfig({
         scrollBasedAnimations: "16-scroll-based-animations.html",
         physics: "17-physics.html",
         importedModels: "18-imported-models.html",
+        raycasterAndMouseEvents: "19-raycaster-and-mouse-events.html",
         love: "love.html",
       },
     },
