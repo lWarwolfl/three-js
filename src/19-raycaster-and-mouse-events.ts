@@ -1,10 +1,6 @@
 import * as dat from "lil-gui";
 import * as THREE from "three";
-import {
-  DRACOLoader,
-  GLTFLoader,
-  OrbitControls,
-} from "three/examples/jsm/Addons.js";
+import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { startLoadingManager } from "./loadingManager";
 
 const gui = new dat.GUI();
@@ -12,60 +8,49 @@ const gui = new dat.GUI();
 const scene = new THREE.Scene();
 
 const loadingManager = startLoadingManager();
-// const textureLoader = new THREE.TextureLoader(loadingManager);
-const dracoLoader = new DRACOLoader(loadingManager);
-dracoLoader.setDecoderPath("/draco/");
-const gltfLoader = new GLTFLoader(loadingManager);
-gltfLoader.setDRACOLoader(dracoLoader);
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+textureLoader.load("/textures/gradients/3.jpg");
 // const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
-const standardMaterial = new THREE.MeshStandardMaterial({
-  metalness: 0.2,
-  roughness: 0.2,
-  side: 2,
-});
+const mainMaterial = new THREE.MeshBasicMaterial();
 
 // Scene Setup
 const plane = new THREE.Mesh(
   new THREE.BoxGeometry(10, 0.05, 10).center(),
-  standardMaterial
+  mainMaterial
 );
-plane.position.y = -1.05;
-
-scene.background = new THREE.Color("black");
+plane.position.y = -3;
 
 scene.add(plane);
 
-// Lights Setup
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambientLight);
+const sphereGeometry = new THREE.SphereGeometry(1, 24, 12);
+const sphere1 = new THREE.Mesh(
+  sphereGeometry,
+  new THREE.MeshBasicMaterial({
+    color: "gray",
+  })
+);
+sphere1.position.x = -3;
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-directionalLight.position.set(1, 2, 0);
-scene.add(directionalLight);
+const sphere2 = new THREE.Mesh(
+  sphereGeometry,
+  new THREE.MeshBasicMaterial({
+    color: "gray",
+  })
+);
 
-// 3D Model Import
-let mixer: THREE.AnimationMixer | null;
+const sphere3 = new THREE.Mesh(
+  sphereGeometry,
+  new THREE.MeshBasicMaterial({
+    color: "gray",
+  })
+);
+sphere3.position.x = 3;
 
-gltfLoader.load("/models/Fox/glTF/Fox.gltf", (res) => {
-  const model = res.scene;
-  mixer = new THREE.AnimationMixer(model);
-  const action = mixer.clipAction(res.animations[0]);
+scene.add(sphere1, sphere2, sphere3);
 
-  action.play();
-
-  model.scale.set(0.03, 0.03, 0.03);
-  model.position.y = -1.02;
-
-  model.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.castShadow = true;
-      child.receiveShadow = false;
-    }
-  });
-
-  scene.add(model);
-});
+const raycaster = new THREE.Raycaster();
 
 // Scene Config
 const sizes = {
@@ -81,6 +66,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 camera.position.z = 5;
+camera.position.y = 5;
 
 scene.add(camera);
 
@@ -94,6 +80,13 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
 });
 
+const mouse = new THREE.Vector2();
+
+window.addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / sizes.width) * 2 - 1;
+  mouse.y = -(event.clientY / sizes.height) * 2 + 1;
+});
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -101,28 +94,36 @@ const canvas = document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFShadowMap;
-
-plane.receiveShadow = true;
-
-directionalLight.castShadow = true;
-directionalLight.shadow.camera.top = 8;
-directionalLight.shadow.camera.right = 11;
-directionalLight.shadow.camera.bottom = -8;
-directionalLight.shadow.camera.left = -11;
-directionalLight.shadow.camera.near = 1;
-directionalLight.shadow.camera.far = 20;
-
 let clock = new THREE.Clock();
-let oldElapsedTime = 0;
+// let oldElapsedTime = 0;
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
-  const deltaTime = elapsedTime - oldElapsedTime;
-  oldElapsedTime = elapsedTime;
+  // const deltaTime = elapsedTime - oldElapsedTime;
+  // oldElapsedTime = elapsedTime;
 
-  if (mixer) mixer.update(deltaTime);
+  sphere1.position.y = Math.sin(elapsedTime * 0.3) * 1.5;
+  sphere2.position.y = Math.sin(elapsedTime * 0.8) * 1.5;
+  sphere3.position.y = Math.sin(elapsedTime * 1.4) * 1.5;
+
+  // const raycasterOrigin = new THREE.Vector3(-4, 0, 0);
+  // const raycasterDirection = new THREE.Vector3(10, 0, 0);
+  // raycasterDirection.normalize();
+  // raycaster.set(raycasterOrigin, raycasterDirection);
+
+  raycaster.setFromCamera(mouse, camera);
+
+  const spheres = [sphere1, sphere2, sphere3];
+  const intersects = raycaster.intersectObjects(spheres);
+
+  for (const sphere of spheres) {
+    sphere.material.color.set("gray");
+  }
+
+  for (const intersect of intersects) {
+    // @ts-expect-error this just works like this and only the type is wrong
+    intersect.object.material.color.set("green");
+  }
 
   controls.update();
 
