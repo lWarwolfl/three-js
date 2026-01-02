@@ -192,6 +192,8 @@ const canvas = document.body.appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 controls.enablePan = false
+controls.minDistance = 10
+controls.maxDistance = 20
 
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFShadowMap
