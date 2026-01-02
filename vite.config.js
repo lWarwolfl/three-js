@@ -25,6 +25,7 @@ export default defineConfig({
         importedModels: "18-imported-models.html",
         raycasterAndMouseEvents: "19-raycaster-and-mouse-events.html",
         love: "love.html",
+        happyBirthday: "happy-birthday.html",
       },
     },
   },
