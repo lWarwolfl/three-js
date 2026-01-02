@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { FontLoader, GLTFLoader, OrbitControls, TextGeometry } from 'three/examples/jsm/Addons.js'
 import { startLoadingManager } from './loadingManagerPlus'
 
-const gui = new dat.GUI()
+new dat.GUI()
 
 const scene = new THREE.Scene()
 
